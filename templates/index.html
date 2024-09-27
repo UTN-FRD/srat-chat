@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .chat-container {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            margin: 20px;
+            width: 300px;
+            height: 400px;
+            display: none;
+            flex-direction: column;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            background-color: #fff;
+            overflow: hidden;
+        }
+        .chat-header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+        }
+        .chat-messages {
+            padding: 10px;
+            flex: 1;
+            overflow-y: auto;
+            border-bottom: 1px solid #ccc;
+        }
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+        .chat-input textarea {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: none;
+            box-sizing: border-box;
+        }
+        .chat-input button {
+            padding: 10px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .chat-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container" id="chat-container">
+        <div class="chat-header" onclick="toggleChat()">Chat con el bot</div>
+        <div class="chat-messages" id="messages"></div>
+        <div class="chat-input">
+            <textarea id="message" rows="2" placeholder="Escribe tu mensaje..."></textarea>
+            <button onclick="sendMessage()">Enviar</button>
+        </div>
+    </div>
+    <button class="chat-toggle" onclick="toggleChat()">💬</button>
+
+    <script>
+        const chatContainer = document.getElementById('chat-container');
+        const messagesDiv = document.getElementById('messages');
+        const messageInput = document.getElementById('message');
+
+        function toggleChat() {
+            if (chatContainer.style.display === 'none' || chatContainer.style.display === '') {
+                chatContainer.style.display = 'flex';
+                messageInput.focus();
+            } else {
+                chatContainer.style.display = 'none';
+            }
+        }
+
+        async function sendMessage() {
+            const userMessage = messageInput.value.trim();
+            if (userMessage === '') return;
+
+            messagesDiv.innerHTML += `<div><b>Tú:</b> ${userMessage}</div>`;
+            messageInput.value = '';
+
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: userMessage })
+            });
+            const data = await response.json();
+            messagesDiv.innerHTML += `<div><b>Bot:</b> ${data.response}</div>`;
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+    </script>
+</body>
+</html>
