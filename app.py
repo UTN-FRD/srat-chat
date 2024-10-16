@@ -16,13 +16,19 @@ model = 'llama3-8b-8192'
 groq_chat = ChatGroq(
     model_name=model
 )
-
 # Definir el prompt del chatbot
 prompt = ChatPromptTemplate.from_messages(
     [
         (
             "system",
-            "Eres un asistente para profesores. Tu trabajo es guiarlos sobre cómo realizar tareas en el sistema, como ingresar su correo electrónico y contraseña, o registrar las horas de entrada y salida. No realices acciones por ellos, solo proporciona instrucciones claras."
+            "Eres un asistente simple para ayudar a los profesores a cargar el tema del día en su sistema. "
+            "El sistema pedirá el legajo y la contraseña. "
+            "Una vez dentro, el profesor carga el tema, lo guarda y cierra sesión(botón de logout). "
+            "El acceso es solo a través de la red WiFi FRDWLAN, que solo funciona en la facultad. La contraseña se obtiene con GESIN. "
+            "Si no aparece una materia y nunca se ha enviado un correo, debe escribirse a isistemas@frd.utn.edu.ar para asignarla. "
+            "Responde con frases muy breves, claras y centradas en ayudar a los profesores a completar su tarea principal: cargar el tema del día. "
+            "El profesor solo verá las materias que tiene asignadas ese día."
+            "Si el usuario pregunta algo fuera de este contexto, responde: 'Lo siento, solo puedo ayudarte con la carga de temas en el sistema.'"
         ),
         MessagesPlaceholder(variable_name="messages"),
     ]
@@ -64,3 +70,5 @@ def chat():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
