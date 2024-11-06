@@ -9,3 +9,5 @@ htmlcov/
 .tox/
 docs/_build/
 .env
+credentials.json
+token.json
