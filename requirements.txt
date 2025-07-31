@@ -1,0 +1,10 @@
+langchain-groq
+langchain-core
+langchain-community
+langgraph
+langchain-google-community[gmail]
+python-dotenv
+google-auth-oauthlib
+google-auth-httplib2
+google-api-python-client
+groq 
