@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,114 +16,352 @@
             bottom: 0;
             right: 0;
             margin: 20px;
-            width: 300px;
-            height: 400px;
+            width: 350px;
+            height: 450px;
             display: none;
             flex-direction: column;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
             background-color: #fff;
             overflow: hidden;
+            z-index: 1000;
         }
         .chat-header {
-            background-color: #007bff;
+            background: linear-gradient(135deg, #28a745, #20c997);
             color: white;
-            padding: 10px;
+            padding: 15px;
             font-weight: bold;
             text-align: center;
             cursor: pointer;
+            position: relative;
         }
         .chat-messages {
-            padding: 10px;
+            padding: 15px;
             flex: 1;
             overflow-y: auto;
-            border-bottom: 1px solid #ccc;
+            background-color: #f8f9fa;
+        }
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+        .message.user {
+            justify-content: flex-end;
+        }
+        .message.bot {
+            justify-content: flex-start;
+        }
+        .message-content {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            word-wrap: break-word;
+        }
+        .message.user .message-content {
+            background-color: #28a745;
+            color: white;
+        }
+        .message.bot .message-content {
+            background-color: #e9ecef;
+            color: #333;
+        }
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            background-color: #e9ecef;
+            border-radius: 18px;
+            max-width: 80%;
+        }
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #28a745;
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+            40% { transform: scale(1); opacity: 1; }
         }
         .chat-input {
             display: flex;
-            padding: 10px;
-            border-top: 1px solid #ccc;
-            background-color: #f1f1f1;
+            padding: 15px;
+            border-top: 1px solid #dee2e6;
+            background-color: #fff;
         }
         .chat-input textarea {
             flex: 1;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 25px;
             resize: none;
             box-sizing: border-box;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+        .chat-input textarea:focus {
+            outline: none;
+            border-color: #28a745;
         }
         .chat-input button {
-            padding: 10px;
+            padding: 12px 20px;
             border: none;
-            background-color: #007bff;
+            background: linear-gradient(135deg, #28a745, #20c997);
             color: #fff;
-            border-radius: 4px;
+            border-radius: 25px;
             cursor: pointer;
             margin-left: 10px;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        .chat-input button:hover {
+            transform: scale(1.05);
+        }
+        .chat-input button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
         .chat-toggle {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background-color: #007bff;
+            background: linear-gradient(135deg, #28a745, #20c997);
             color: white;
             border: none;
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             font-size: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+            z-index: 999;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .chat-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+        }
+        .close-chat {
+            position: absolute;
+            top: 8px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+        }
+        .close-chat:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .timestamp {
+            font-size: 11px;
+            color: #6c757d;
+            margin-top: 5px;
+            text-align: center;
+        }
+        .welcome-message {
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+            margin: 20px 0;
         }
     </style>
 </head>
 <body>
     <div class="chat-container" id="chat-container">
-        <div class="chat-header" onclick="toggleChat()">Chat con el bot</div>
-        <div class="chat-messages" id="messages"></div>
+        <div class="chat-header">
+            Asistente Virtual
+            <button onclick="toggleChat()" class="close-chat">✖</button>
+        </div>
+        
+        <div class="chat-messages" id="messages">
+            <div class="welcome-message">
+                ¡Hola! Soy tu asistente virtual. ¿En qué puedo ayudarte hoy?
+            </div>
+        </div>
+        
+        <div class="typing-indicator" id="typing-indicator">
+            <div class="typing-dots">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
+            <span style="margin-left: 10px; color: #6c757d;">Bot escribiendo...</span>
+        </div>
+        
         <div class="chat-input">
-            <textarea id="message" rows="2" placeholder="Escribe tu mensaje..."></textarea>
-            <button onclick="sendMessage()">Enviar</button>
+            <textarea id="message" rows="1" placeholder="Escribe tu mensaje..." onkeypress="handleKeyPress(event)"></textarea>
+            <button onclick="sendMessage()" id="send-button">📤</button>
         </div>
     </div>
-    <button class="chat-toggle" onclick="toggleChat()">💬</button>
+    <button class="chat-toggle" id="chat-toggle" onclick="toggleChat()">💬</button>
 
     <script>
         const chatContainer = document.getElementById('chat-container');
+        const toggleButton = document.getElementById('chat-toggle');
         const messagesDiv = document.getElementById('messages');
         const messageInput = document.getElementById('message');
+        const typingIndicator = document.getElementById('typing-indicator');
+        const sendButton = document.getElementById('send-button');
+
+        // Variables para el routing
+        let currentTipoConsulta = 'GENERAL';
+        let isFirstInteraction = true;
 
         function toggleChat() {
-            if (chatContainer.style.display === 'none' || chatContainer.style.display === '') {
-                chatContainer.style.display = 'flex';
+            const isOpen = chatContainer.style.display === 'flex';
+            chatContainer.style.display = isOpen ? 'none' : 'flex';
+            toggleButton.style.display = isOpen ? 'flex' : 'none';
+            if (!isOpen) {
                 messageInput.focus();
-            } else {
-                chatContainer.style.display = 'none';
             }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        function showTypingIndicator() {
+            typingIndicator.style.display = 'flex';
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            typingIndicator.style.display = 'none';
+        }
+
+        function addMessage(content, isUser = false, tipoConsulta = null) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+            
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            
+            // Agregar el contenido del mensaje directamente
+            const textNode = document.createTextNode(content);
+            messageContent.appendChild(textNode);
+            
+            const timestamp = document.createElement('div');
+            timestamp.className = 'timestamp';
+            timestamp.textContent = new Date().toLocaleTimeString('es-ES', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            
+            messageDiv.appendChild(messageContent);
+            messageDiv.appendChild(timestamp);
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
         async function sendMessage() {
             const userMessage = messageInput.value.trim();
-            if (userMessage === '') return;
+            if (userMessage === '' || sendButton.disabled) return;
 
-            messagesDiv.innerHTML += `<div><b>Tú:</b> ${userMessage}</div>`;
+            // Deshabilitar botón y input durante el envío
+            sendButton.disabled = true;
+            messageInput.disabled = true;
+            
+            // Agregar mensaje del usuario
+            addMessage(userMessage, true);
             messageInput.value = '';
-
-            const response = await fetch('/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ message: userMessage })
-            });
-            const data = await response.json();
-            messagesDiv.innerHTML += `<div><b>Bot:</b> ${data.response}</div>`;
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            
+            // Mostrar indicador de escritura inmediatamente
+            showTypingIndicator();
+            
+            try {
+                // Preparar el payload con el tipo de consulta actual
+                const payload = { 
+                    message: userMessage,
+                    tipo_consulta: currentTipoConsulta
+                };
+                
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const data = await response.json();
+                
+                // Actualizar el tipo de consulta si es la primera interacción
+                if (data.es_primera_interaccion) {
+                    currentTipoConsulta = data.tipo_consulta;
+                    isFirstInteraction = false;
+                } else if (data.tipo_consulta) {
+                    currentTipoConsulta = data.tipo_consulta;
+                }
+                
+                // Simular tiempo de escritura (mínimo 1 segundo para que se vea el indicador)
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    addMessage(data.response, false);
+                }, 1500 + Math.random() * 1000); // Entre 1.5-2.5 segundos
+                
+            } catch (error) {
+                hideTypingIndicator();
+                addMessage('Lo siento, hubo un error al procesar tu mensaje. Inténtalo de nuevo.', false);
+                console.error('Error:', error);
+            } finally {
+                // Rehabilitar botón e input
+                sendButton.disabled = false;
+                messageInput.disabled = false;
+                messageInput.focus();
+            }
         }
+
+        // Auto-resize del textarea
+        messageInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+        });
+
+        // Animación de entrada del chat
+        function animateChatOpen() {
+            chatContainer.style.transform = 'scale(0.8)';
+            chatContainer.style.opacity = '0';
+            setTimeout(() => {
+                chatContainer.style.transition = 'all 0.3s ease';
+                chatContainer.style.transform = 'scale(1)';
+                chatContainer.style.opacity = '1';
+            }, 10);
+        }
+
+        // Mejorar la función toggleChat
+        const originalToggleChat = toggleChat;
+        toggleChat = function() {
+            const isOpen = chatContainer.style.display === 'flex';
+            if (!isOpen) {
+                chatContainer.style.display = 'flex';
+                animateChatOpen();
+            } else {
+                chatContainer.style.display = 'none';
+            }
+            toggleButton.style.display = isOpen ? 'flex' : 'none';
+            if (!isOpen) {
+                messageInput.focus();
+            }
+        };
     </script>
 </body>
 </html>

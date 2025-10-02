@@ -1,3 +1,0 @@
-¿Cómo ingreso mi correo?:Haz clic en el botón 'Ingresar Correo' y escribe tu dirección de correo electrónico.
-¿Cómo registro mi entrada?:Presiona el botón 'Registrar Entrada' cuando comiences tu clase.
-¿Cómo registro mi salida?:Presiona el botón 'Registrar Salida' cuando termines tu clase.

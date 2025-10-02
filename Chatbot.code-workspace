@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../AI"
+		},
+		{
+			"path": "../desarrollo"
+		},
+		{
+			"path": "../diseño"
+		},
+		{
+			"path": "../srat"
+		},
+		{
+			"path": "../angular"
+		}
+	],
+	"settings": {}
+}
